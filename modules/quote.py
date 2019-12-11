@@ -26,7 +26,7 @@ def createEmbed(reaction, user):
     embed = discord.Embed(title=None, description=None, color=0x00ff00)
     embed.set_author(name=quote_sender, icon_url=reaction.message.author.avatar_url)
     embed.add_field(name="Original message:", value=f"{quote_message}", inline=False)
-    embed.add_field(name="Time sent:", value="{0}".format(time_sent.strftime("%m/%d/%Y, %H:%M:%S")), inline=False)
+    embed.add_field(name="Time sent:", value="{0}".format(time_sent.strftime("%d/%m/%Y, %H:%M:%S")), inline=False)
     
     return embed
     

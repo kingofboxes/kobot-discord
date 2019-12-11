@@ -1,8 +1,12 @@
+# External modules.
 import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+
+# Internal modules.
 from modules.quote import *
+from util.logger import *
 
 # Load the required variables from .env file.
 load_dotenv()
@@ -34,7 +38,9 @@ async def on_message(message):
         return
 
     # Log the message in console, change output to log file later.
-    print(f'Message from {message.author}: {message.content}')
+    output = f'[{timestamp()}] Message from {message.author}: {message.content}'
+    log(output)
+    print(output)
 
     # Hidden feature.
     if message.content.find('bitch') >= 0: 
@@ -55,7 +61,9 @@ async def on_reaction_add(reaction, user):
 
     # Triggers the quote module.
     if(reaction.emoji.encode() == asterisk_emoji):
-        print(f"User {user.name} quoted message: {reaction.message.content}")
+        message = f"User {user.name} quoted message: {reaction.message.content}"
+        log(message)
+        print(message)
         await quoteMessage(reaction, user)
 
 # ------------------ COMMANDS START HERE ------------------ #
