@@ -65,6 +65,7 @@ async def on_reaction_add(reaction, user):
         log(message)
         print(message)
         await quoteMessage(reaction, user)
+        await reaction.message.remove_reaction(asterisk_emoji.decode(), user)
 
 # ------------------ COMMANDS START HERE ------------------ #
 
