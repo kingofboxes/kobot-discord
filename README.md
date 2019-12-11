@@ -12,7 +12,7 @@ DISCORD_GUILD_ID = <GUILD_ID_TO_CONNECT_TO>
 4. Install requirements from "requirements.txt" using pip.
 
 **Execution:**
-Program can be run with:
+Program can be run with:\n
 ```
 python3 main.py
 ```
