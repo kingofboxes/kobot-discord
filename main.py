@@ -7,7 +7,7 @@ from modules.quote import *
 # Load the required variables from .env file.
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
-env_guild = os.getenv('DISCORD_GUILD')
+env_guild = os.getenv('DISCORD_GUILD_ID')
 
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
@@ -17,10 +17,10 @@ bot = commands.Bot(command_prefix='!')
 @bot.event
 async def on_ready():
     print('----------------------------------------')
-    print('Logged in as {0.user}!'.format(bot))
+    print(f'Logged in as {bot.user}!')
 
-    guild = discord.utils.find(lambda g: g.name == env_guild, bot.guilds)
-    print('Connected to guild: {0.name} ({0.id})'.format(guild))
+    guild = discord.utils.find(lambda g: g.id == int(env_guild), bot.guilds)
+    print(f'Connected to guild: {guild.name} ({guild.id})')
 
     members = '\n - '.join([member.name for member in guild.members])
     print('Guild Members:\n - ' + members)
@@ -34,7 +34,7 @@ async def on_message(message):
         return
 
     # Log the message in console, change output to log file later.
-    print('Message from {0.author}: {0.content}'.format(message))
+    print(f'Message from {message.author}: {message.content}')
 
     # Hidden feature.
     if message.content.find('bitch') >= 0: 
@@ -55,7 +55,7 @@ async def on_reaction_add(reaction, user):
 
     # Triggers the quote module.
     if(reaction.emoji.encode() == asterisk_emoji):
-        print("Reaction added to message: " + reaction.message.content)
+        print(f"User {user.name} quoted message: {reaction.message.content}")
         await quoteMessage(reaction, user)
 
 # ------------------ COMMANDS START HERE ------------------ #
