@@ -1,6 +1,5 @@
 # kobot-private
 
-
 **Installation:**
 1. Clone the repository.
 2. Create a new .env file.
@@ -12,10 +11,13 @@ DISCORD_GUILD_ID = <GUILD_ID_TO_CONNECT_TO>
 4. Install requirements from "requirements.txt" using pip.
 
 **Execution:**
-Program can be run with:\n
+
+Program can be run with:
+
 ```
 python3 main.py
 ```
+
 Written for Python3.6+.
 
 **To-do List:**
