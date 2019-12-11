@@ -1,9 +1,8 @@
-# Imports for main.
 import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from quote import *
+from modules.quote import *
 
 # Load the required variables from .env file.
 load_dotenv()
@@ -13,7 +12,8 @@ env_guild = os.getenv('DISCORD_GUILD')
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
 
-# Custom events.
+# ------------------ EVENTS START HERE ------------------ #
+
 @bot.event
 async def on_ready():
     print('----------------------------------------')
@@ -29,11 +29,14 @@ async def on_ready():
 @bot.event
 async def on_message(message):
 
+    # Stops bot from trigger responses to its own messages.
     if message.author == bot.user:
         return
 
+    # Log the message in console, change output to log file later.
     print('Message from {0.author}: {0.content}'.format(message))
 
+    # Hidden feature.
     if message.content.find('bitch') >= 0: 
         await message.channel.send(message.author.name + ', you kiss your mother with that mouth?')
 
@@ -42,22 +45,24 @@ async def on_message(message):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.CheckFailure):
-        await ctx.send('You do not have the correct role for this command.')
+        await ctx.send('You do not have the permission to use this command.')
 
 @bot.event
 async def on_reaction_add(reaction, user):
 
+    # Representations of emojis.
     asterisk_emoji = b'*\xef\xb8\x8f\xe2\x83\xa3'
 
-    # Only trigger a response if the asterisk emoji is being used.
+    # Triggers the quote module.
     if(reaction.emoji.encode() == asterisk_emoji):
         print("Reaction added to message: " + reaction.message.content)
         await quoteMessage(reaction, user)
-    
+
+# ------------------ COMMANDS START HERE ------------------ #
 
 # Bot commands.
+# Mirrors whatever the user says, sends it back to you as a PM.
 @bot.command(name='mirror')
-@commands.has_role('Admin')
 async def mirror(ctx):
     member = ctx.message.author
     response = ctx.message.content.split()[1:]
@@ -65,11 +70,5 @@ async def mirror(ctx):
     await member.create_dm()
     await member.dm_channel.send(response)
 
-@bot.command(name='hello')
-async def hello(ctx):
-    embed = discord.Embed(title="Title", description="Desc", color=0x00ff00)
-    embed.add_field(name="Field1", value="hi", inline=False)
-    embed.add_field(name="Field2", value="hi2", inline=False)
-    await ctx.message.channel.send(embed=embed)
-
+# Run the bot.
 bot.run(env_token)
