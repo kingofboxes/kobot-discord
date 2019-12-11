@@ -2,10 +2,14 @@
 
 
 **Installation:**
-* Clone the repository.
-* Create a new .env file.
-* Add the following two lines in the file (separated by a new line): "DISCORD_TOKEN = <BOT_TOKEN>" and "DISCORD_GUILD_ID = <GUILD_ID_TO_CONNECT_TO>".
-* Install requirements from "requirements.txt" using pip.
+1. Clone the repository.
+2. Create a new .env file.
+3. Add the following two lines in the file:
+```
+DISCORD_TOKEN = <BOT_TOKEN> 
+DISCORD_GUILD_ID = <GUILD_ID_TO_CONNECT_TO>
+```
+4. Install requirements from "requirements.txt" using pip.
 
 **Execution:**
 Program can be run with:\
