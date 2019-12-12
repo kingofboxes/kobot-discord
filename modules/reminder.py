@@ -48,8 +48,11 @@ async def set_reminder(ctx):
     if len(input) == 1:
         reminder = "Reminding you for something you've set " + duration + " minutes ago."
     elif len(input) == 2:
-        if input[1].isdigit():
+        if input[1].lstrip("-").isdigit():
             duration = input[1]
+            if int(duration) <= 0:
+                await handleEdgeCases(ctx, True)
+                return
             reminder = "Reminding you for something you've set " + input[1] + " minutes ago."
         else:
             reminder = "Reminding you for something you've set 10 minutes ago: \"" + input[1] + "\"."
@@ -58,12 +61,19 @@ async def set_reminder(ctx):
             duration = input[1]
             reminder = "Reminder from " + input[1] + " minutes ago: \"" + input[2] + "\"."
         else:
-            usage_message = "```Usage: !remindme [time] [description]```"
-            await member.create_dm()
-            await member.dm_channel.send(usage_message)
+            await handleEdgeCases(ctx)
             return
 
     confirmation = "Reminder set. Reminding you in " + duration + " minutes."
     await ctx.message.channel.send(confirmation)
 
     remindersList.append(reminderHelper(member, duration, reminder, remindersList))
+
+async def handleEdgeCases(ctx, integer=False):
+    
+    if integer is False:
+        usage_message = "```Usage: !remindme [time] [description]```"
+    else:
+        usage_message = "Please enter a non-negative or non-zero integer for time."
+
+    await ctx.message.channel.send(usage_message)
