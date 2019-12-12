@@ -39,9 +39,7 @@ async def on_message(message):
         return
 
     # Log the message in console, change output to log file later.
-    output = f'[{timestamp()}] Message from {message.author}: {message.content}'
-    log(output)
-    print(output)
+    log(f'[{timestamp()}] Message from {message.author}: {message.content}')
 
     # Hidden feature.
     if message.content.find('bitch') >= 0: 
@@ -62,9 +60,7 @@ async def on_reaction_add(reaction, user):
 
     # Triggers the quote module.
     if(reaction.emoji.encode() == asterisk_emoji):
-        message = f"User {user.name} quoted message: {reaction.message.content}"
-        log(message)
-        print(message)
+        log(f'[{timestamp()}] {user.name} quoted message: {reaction.message.content}')
         await quoteMessage(reaction, user)
         await reaction.message.remove_reaction(asterisk_emoji.decode(), user)
 

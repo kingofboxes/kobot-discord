@@ -5,6 +5,7 @@ def timestamp():
     return (datetime.now() + timedelta(hours=11)).strftime("%d/%m/%Y, %H:%M:%S")
 
 def log(message):
+    print(message)
     f = open("log.txt", "a+")
     f.write(message + "\n")
     f.close()
