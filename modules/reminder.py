@@ -63,8 +63,7 @@ async def set_reminder(ctx):
             await member.dm_channel.send(usage_message)
             return
 
-    acceptance_message = "Reminder set. Reminding you in " + duration + " minutes."
-    await member.create_dm()
-    await member.dm_channel.send(acceptance_message)
+    confirmation = "Reminder set. Reminding you in " + duration + " minutes."
+    await ctx.message.channel.send(confirmation)
 
     remindersList.append(reminderHelper(member, duration, reminder, remindersList))
