@@ -1,10 +1,29 @@
 import discord
-import asyncio
 from datetime import datetime, timedelta
-from discord.ext import commands
-from .reminderHelper import *
+from discord.ext import tasks, commands
 
+# List of reminders.
 remindersList = []
+
+# Helper class for reminders.
+class reminderHelper():
+    def __init__(self, member, duration, reminder, remindersList):
+        self.__member = member
+        self.__reminder = reminder
+        self.__remindersList = remindersList
+        self.__reminderDue = datetime.now() + timedelta(minutes=int(duration))
+        self.sendReminder.start()
+
+    def stopReminderCheck(self):
+        self.sendReminder.cancel()
+        self.__remindersList.remove(self)
+
+    @tasks.loop(minutes=1.0)
+    async def sendReminder(self):
+        if datetime.now() > self.__reminderDue:
+            await self.__member.create_dm()
+            await self.__member.dm_channel.send(self.__reminder)
+            self.stopReminderCheck()
 
 async def set_reminder(ctx):
 
@@ -38,12 +57,14 @@ async def set_reminder(ctx):
         if input[1].isdigit():
             duration = input[1]
             reminder = "Reminder from " + input[1] + " minutes ago: \"" + input[2] + "\"."
-        elif input[2].isdigit():
-            duration = input[2]
-            reminder = "Reminder from " + input[2] + " minutes ago: \"" + input[1] + "\"." 
         else:
+            usage_message = "```Usage: !remindme [time] [description]```"
             await member.create_dm()
-            await member.dm_channel.send("Please specify the duration (in minutes) of when you would like to be reminded.")
+            await member.dm_channel.send(usage_message)
             return
+
+    acceptance_message = "Reminder set. Reminding you in " + duration + " minutes."
+    await member.create_dm()
+    await member.dm_channel.send(acceptance_message)
 
     remindersList.append(reminderHelper(member, duration, reminder, remindersList))
