@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 
 # Internal modules.
 from modules.quote import *
-from util.logger import *
+from modules.reminder import *
+from utilities.logger import *
 
 # Load the required variables from .env file.
 load_dotenv()
@@ -69,7 +70,6 @@ async def on_reaction_add(reaction, user):
 
 # ------------------ COMMANDS START HERE ------------------ #
 
-# Bot commands.
 # Mirrors whatever the user says, sends it back to you as a PM.
 @bot.command(name='mirror')
 async def mirror(ctx):
@@ -78,6 +78,11 @@ async def mirror(ctx):
     response = ' '.join(response)
     await member.create_dm()
     await member.dm_channel.send(response)
+
+# Reminder feature, like the one on Reddit.
+@bot.command(name='remindme')
+async def reminder(ctx):
+    await set_reminder(ctx)
 
 # Run the bot.
 bot.run(env_token)

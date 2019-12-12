@@ -7,7 +7,6 @@ async def quoteMessage(reaction, user):
     
     # Variables used in quoting.
     quote_quoter = user.name
-    quote_sender = reaction.message.author.name
 
     # Create an embed to send.
     embed = createEmbed(reaction, user)
