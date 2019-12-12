@@ -14,15 +14,16 @@ async def quoteMessage(reaction, user):
 
     # Channel which the message was sent.
     channel = reaction.message.channel
-    await channel.send(content = f"**{quote_quoter}** has quoted **{quote_sender}**:", embed=embed)
+    await channel.send(content = f"**{quote_quoter}** quoted **{reaction.message.author.mention}**:", embed=embed)
 
 # Creates the rich embed.
 def createEmbed(reaction, user):
-
+    
     quote_sender = reaction.message.author.name
     quote_message = reaction.message.content
     time_sent = reaction.message.created_at + timedelta(hours=11)
 
+    # Retrieve the urls for the attachment of the quoted message.
     url = None
     attachments = reaction.message.attachments
     if attachments is not None:
@@ -33,9 +34,11 @@ def createEmbed(reaction, user):
     embed = discord.Embed(title=None, description=None, color=0x00ff00)
     embed.set_author(name=quote_sender, icon_url=reaction.message.author.avatar_url)
 
+    # If the message is just an image upload, don't add a field.
     if quote_message != '':
         embed.add_field(name="Original message:", value=f"{quote_message}", inline=False)
 
+    # If there is a URL, add an attachments field and a direct link to it.
     if url is not None:
         embed.add_field(name="Attachments:", value=url, inline=False)
         embed.set_image(url=url)
