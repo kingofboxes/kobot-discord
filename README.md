@@ -21,7 +21,4 @@ Written for Python3.6+.
 **Current Features:**
 1. Parroting. !mirror <message> will send the message back to you in your PMs.
 2. Quoting. Reacting to a message with :asterisk: will quote the message and mention the original sender. Works with images.
-
-**To-do List:**
-* Add in a remind me command.
-* Debug mirror.
+3. Reminders. !remindme will set a reminder. Usage: !remindme [time] [description] 
