@@ -30,7 +30,7 @@ def createEmbed(reaction, user):
             if '.png' in a.url or '.jpg' in a.url:
                 url = a.url
 
-    embed = discord.Embed(title=None, description=None, color=0x00ff00)
+    embed = discord.Embed(title=None, description=None, color=0x2e86c1)
     embed.set_author(name=quote_sender, icon_url=reaction.message.author.avatar_url)
 
     # If the message is just an image upload, don't add a field.

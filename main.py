@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 # Internal modules.
 from modules.quote import *
 from modules.reminder import *
+from modules.uwulate import *
 from utilities.logger import *
 
 # Load the required variables from .env file.
@@ -57,12 +58,19 @@ async def on_reaction_add(reaction, user):
 
     # Representations of emojis.
     asterisk_emoji = b'*\xef\xb8\x8f\xe2\x83\xa3'
+    wheelchair_emoji = b'\xe2\x99\xbf'
 
     # Triggers the quote module.
     if(reaction.emoji.encode() == asterisk_emoji):
         log(f'[{timestamp()}] {user.name} quoted message: {reaction.message.content}')
         await quoteMessage(reaction, user)
         await reaction.message.remove_reaction(asterisk_emoji.decode(), user)
+
+    # Triggers the uwulating module.
+    if(reaction.emoji.encode() == wheelchair_emoji):
+        log(f'[{timestamp()}] {user.name} uwulated message: {reaction.message.content}')
+        await uwulateMessage(reaction, user, bot)
+        await reaction.message.remove_reaction(wheelchair_emoji.decode(), user)
 
 # ------------------ COMMANDS START HERE ------------------ #
 
@@ -79,6 +87,12 @@ async def mirror(ctx):
 @bot.command(name='remindme')
 async def reminder(ctx):
     await set_reminder(ctx)
+
+# uwutranslator, but no source code.
+@bot.command(name='uwulate')
+async def uwu(ctx):
+    message = uwulate(ctx.message.content.split(' ', 1)[1])
+    await ctx.message.channel.send(message)
 
 # Run the bot.
 bot.run(env_token)
