@@ -13,7 +13,6 @@ from utilities.logger import *
 # Load the required variables from .env file.
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
-env_guild = os.getenv('DISCORD_GUILD_ID')
 
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
@@ -22,15 +21,7 @@ bot = commands.Bot(command_prefix='!')
 
 @bot.event
 async def on_ready():
-    print('----------------------------------------')
-    print(f'Logged in as {bot.user}!')
-
-    guild = discord.utils.find(lambda g: g.id == int(env_guild), bot.guilds)
-    print(f'Connected to guild: {guild.name} ({guild.id})')
-
-    members = '\n - '.join([member.name for member in guild.members])
-    print('Guild Members:\n - ' + members)
-    print('----------------------------------------')
+    print(f'[{timestamp()}] Logged in as {bot.user}!')
 
 @bot.event
 async def on_message(message):
@@ -50,9 +41,10 @@ async def on_message(message):
 
 @bot.event
 async def on_command_error(ctx, error):
+
     if isinstance(error, commands.errors.CheckFailure):
         await ctx.send('You do not have the permission to use this command.')
-
+    
 @bot.event
 async def on_reaction_add(reaction, user):
 
