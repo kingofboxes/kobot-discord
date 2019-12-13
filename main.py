@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from modules.quote import *
 from modules.reminder import *
 from modules.uwulate import *
+from modules.dictionary import *
 from utilities.logger import *
 
 # Load the required variables from .env file.
@@ -85,6 +86,11 @@ async def reminder(ctx):
 async def uwu(ctx):
     message = uwulate(ctx.message.content.split(' ', 1)[1])
     await ctx.message.channel.send(message)
+
+# Dictionary for quick definition of words.
+@bot.command(name='define')
+async def define(ctx):
+    await get_definition(ctx)
 
 # Run the bot.
 bot.run(env_token)
