@@ -33,14 +33,6 @@ async def set_reminder(ctx):
     # Maximum amount of times the string should be split is 2.
     input = message.split(' ', 2)
 
-    # Use cases: 
-    #   - !remindme
-    #   - !remindme <time>
-    #   - !remindme <description>
-    #   - !remindme <time> <description>
-    #   - !remindme <description> <time>
-    #   - !remindme <str> <str>
-
     # If there's only 1 thing in the list, it'll be a default implementation.
     # Default reminder: 10 minutes.
     duration = "10"

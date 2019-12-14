@@ -4,7 +4,12 @@ attrs==19.3.0
 chardet==3.0.4
 discord.py==1.2.5
 idna==2.8
+idna-ssl==1.1.0
 multidict==4.7.0
+nltk==3.4.5
 python-dotenv==0.10.3
+six==1.13.0
+typing-extensions==3.7.4.1
 websockets==6.0
+wn==0.0.22
 yarl==1.4.2
