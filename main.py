@@ -35,8 +35,8 @@ async def on_message(message):
     log(f'[{timestamp()}] Message from {message.author}: {message.content}')
 
     # Hidden feature.
-    if message.content.find('bitch') >= 0: 
-        await message.channel.send(message.author.name + ', you kiss your mother with that mouth?')
+    # if message.content.find('bitch') >= 0: 
+    #     await message.channel.send(message.author.name + ', you kiss your mother with that mouth?')
 
     await bot.process_commands(message)
 
