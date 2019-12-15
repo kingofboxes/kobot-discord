@@ -60,14 +60,16 @@ python3 main.py
 2. Quoting. Reacting to a message with ✳️ will quote the message and mention the original sender. Works with images.
 3. Reminders. !remindme will set a reminder. Usage: !remindme [time] [description] 
 4. Uwulate. !uwulate <message> will uwulate the message. Reacting to a message with ♿ will uwulate the message and notify the original sender.
-5. Dictionary. !define <word> will attempt to find the word in the dictionary. Note that it takes some time.
-
+5. Dictionary. !define <word> will attempt to find the word in the dictionary. Note that it takes some time as it searches a local dictionary (change to JSON scraper later)?
+6. Dice rolls. !roll [x] [y] will roll a number between x and y (0 and 1 if x and y not given).
+ 
 ### Motivation
 1. Parroting was an introduction to using the discord.py and learning how to send messages.
 2. Quoting was the first major feature which involved learning and using the discord.py API to do a simple task with many steps.
 3. Reminders was the second major feature which was slightly more complex with use cases and learning how to run background tasks.
 4. Uwulate was the third feature that was extremely simple and minor. Idea taken from Reddit.
 5. Dictionary was the fourth major feature that involved learning how to use a different API and combining it with my bot.
+6. Garry always uses rng to decide on things, so why not incorporate this?
 
 This whole project is a learning experience aimed to develop my skills by extending functionality to the bot while being practical about the features added.
 

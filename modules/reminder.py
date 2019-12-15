@@ -43,7 +43,7 @@ async def set_reminder(ctx):
         if input[1].lstrip("-").isdigit():
             duration = input[1]
             if int(duration) <= 0:
-                await handleEdgeCases(ctx, True)
+                await handleReminderCases(ctx, True)
                 return
             reminder = "Reminding you for something you've set " + input[1] + " minutes ago."
         else:
@@ -53,7 +53,7 @@ async def set_reminder(ctx):
             duration = input[1]
             reminder = "Reminder from " + input[1] + " minutes ago: \"" + input[2] + "\"."
         else:
-            await handleEdgeCases(ctx)
+            await handleReminderCases(ctx)
             return
 
     confirmation = "Reminder set. Reminding you in " + duration + " minutes."
@@ -61,7 +61,7 @@ async def set_reminder(ctx):
 
     remindersList.append(reminderHelper(member, duration, reminder, remindersList))
 
-async def handleEdgeCases(ctx, integer=False):
+async def handleReminderCases(ctx, integer=False):
     
     if integer is False:
         usage_message = "```Usage: !remindme [time] [description]```"

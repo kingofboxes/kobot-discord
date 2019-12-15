@@ -5,10 +5,11 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 # Internal modules.
-from modules.quote import *
-from modules.reminder import *
-from modules.uwulate import *
-from modules.dictionary import *
+from modules.quote import quoteMessage
+from modules.reminder import set_reminder
+from modules.uwulate import uwulate, uwulateMessage
+from modules.dictionary import get_definition
+from modules.dice import roll_dice
 from utilities.logger import *
 
 # Load the required variables from .env file.
@@ -91,6 +92,11 @@ async def uwu(ctx):
 @bot.command(name='define')
 async def define(ctx):
     await get_definition(ctx)
+
+# Dice roll for decisions if you want to leave it up to the gods.
+@bot.command(name='roll')
+async def roll(ctx):
+    await roll_dice(ctx)
 
 # Run the bot.
 bot.run(env_token)
