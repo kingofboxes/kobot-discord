@@ -1,9 +1,16 @@
+# For regular dictionary.
 from wn import WordNet
 from wn.info import WordNetInformationContent
 from wn.constants import wordnet_30_dir, wordnet_33_dir
 
+# For urban dictionary.
+import urllib.request
+import json
+
+# NORMAL DICTIONARY
+
 # Gets the definition of the word.
-async def get_definition(ctx):
+async def get_definition_normal(ctx):
 
     # Create instance of wordnet.
     wordnet = WordNet(wordnet_30_dir)
@@ -40,3 +47,45 @@ def categorise(word):
         return "adv"
     else:
         return "n/a"
+
+# Gets the definition of the word from Urban Dictionary.
+async def get_definition_urban(ctx):
+
+    query = ctx.message.content.split(' ', 1)[1]
+    url = "http://api.urbandictionary.com/v0/define?term=" + query
+    response = urllib.request.urlopen(url)
+    data = json.loads(response.read())
+
+    if len(data) > 0:
+
+        definitions = sorted(data['list'], key = lambda i : i['thumbs_up'], reverse=True)[0:3]
+        
+        block = ""
+        index = 1
+
+        for d in definitions:
+            definition = strip_artefacts(d['definition'])
+            if '\n' not in d['example']:
+                block = block + f"{index}. {definition} ({d['thumbs_up']} thumbs up)\n\n{strip_artefacts(d['example'])}\n\n"
+            else:
+                block = block + f"{index}. {definition} ({d['thumbs_up']} thumbs up)\n\n{strip_artefacts(d['example'])}\n"
+            index += 1
+        
+        message = f"Searching Urban Dictionary for {query}...\n```{block}```"
+        print(block)
+    else:
+        message = f"Could not find requested word in dictionary."   
+        
+    await ctx.message.channel.send(message)
+
+# Strips the string.
+def strip_artefacts(string):
+
+    # Strip the brackets.
+    string = string.replace('[', '')
+    string = string.replace(']', '')
+    
+    # In case of doubles...
+    string = string.replace('\r\n\r\n', '\r\n')
+
+    return string

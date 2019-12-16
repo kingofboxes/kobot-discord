@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from modules.quote import quoteMessage
 from modules.reminder import set_reminder
 from modules.uwulate import uwulate, uwulateMessage
-from modules.dictionary import get_definition
+from modules.dictionary import get_definition_normal, get_definition_urban
 from modules.dice import roll_dice
 from utilities.logger import *
 
@@ -91,12 +91,17 @@ async def uwu(ctx):
 # Dictionary for quick definition of words.
 @bot.command(name='define')
 async def define(ctx):
-    await get_definition(ctx)
+    await get_definition_normal(ctx)
 
 # Dice roll for decisions if you want to leave it up to the gods.
 @bot.command(name='roll')
 async def roll(ctx):
     await roll_dice(ctx)
+
+# Urban dictionary.
+@bot.command(name='udict')
+async def udict(ctx):
+    await get_definition_urban(ctx)
 
 # Run the bot.
 bot.run(env_token)
