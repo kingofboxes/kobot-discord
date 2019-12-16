@@ -1,8 +1,11 @@
 # External modules.
 import os
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
+from datetime import datetime
+import signal
+import json
 
 # Internal modules.
 from modules.quote import quoteMessage
@@ -15,15 +18,28 @@ from utilities.logger import *
 # Load the required variables from .env file.
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
+reminders = []
 
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
 
-# ------------------ EVENTS START HERE ------------------ #
+# ------------------ PERSISTENCE STARTS HERE ------------------ #
 
+def save_exit():
+    print('Exiting...')
+
+def save_exit_handler(signal, frame):
+    save_exit()
+    sys.exit()
+
+signal.signal(signal.SIGINT, save_exit_handler)
+
+# ------------------ EVENTS START HERE ------------------ #
+    
 @bot.event
 async def on_ready():
     print(f'[{timestamp()}] Logged in as {bot.user}!')
+    check_reminders.start()
 
 @bot.event
 async def on_message(message):
@@ -35,17 +51,12 @@ async def on_message(message):
     # Log the message in console, change output to log file later.
     log(f'[{timestamp()}] Message from {message.author}: {message.content}')
 
-    # Hidden feature.
-    # if message.content.find('bitch') >= 0: 
-    #     await message.channel.send(message.author.name + ', you kiss your mother with that mouth?')
-
     await bot.process_commands(message)
 
 @bot.event
 async def on_command_error(ctx, error):
-
     if isinstance(error, commands.errors.CheckFailure):
-        await ctx.send('You do not have the permission to use this command.')
+        await ctx.send('You do not have permission to use this command.')
     
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -80,7 +91,8 @@ async def mirror(ctx):
 # Reminder feature, like the one on Reddit.
 @bot.command(name='remindme')
 async def reminder(ctx):
-    await set_reminder(ctx)
+    d = await set_reminder(ctx)
+    reminders.append(d)
 
 # uwutranslator, but no source code.
 @bot.command(name='uwulate')
@@ -102,6 +114,35 @@ async def roll(ctx):
 @bot.command(name='udict')
 async def udict(ctx):
     await get_definition_urban(ctx)
+
+# Log out and dump reminders into a file for persistency's sake.
+@bot.command(name='logout')
+@commands.is_owner()
+async def logout(ctx):
+
+    # Opens the json file for writing.
+    with open('data/reminders.json', 'w+') as fp:
+        json.dump(reminders, fp)
+        fp.close()
+
+    # Closes the bot gracefully.
+    await bot.logout()
+
+# Background task that checks reminders when the bot loads.
+@tasks.loop(seconds=1.0)
+async def check_reminders():
+
+    for d in reminders:
+        if datetime.now() > datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f'):
+            for g in bot.guilds:
+                member = g.get_member(d['id'])
+                await member.send(d['reminder'])
+                reminders.remove(d)
+
+# Load json.
+with open('data/reminders.json', 'r') as fp:
+    reminders = json.load(fp)
+    fp.close()
 
 # Run the bot.
 bot.run(env_token)

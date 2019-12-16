@@ -2,29 +2,7 @@ import discord
 from datetime import datetime, timedelta
 from discord.ext import tasks, commands
 
-# List of reminders.
-remindersList = []
-
-# Helper class for reminders.
-class reminderHelper():
-    def __init__(self, member, duration, reminder, remindersList):
-        self.__member = member
-        self.__reminder = reminder
-        self.__remindersList = remindersList
-        self.__reminderDue = datetime.now() + timedelta(minutes=int(duration))
-        self.sendReminder.start()
-
-    def stopReminderCheck(self):
-        self.sendReminder.cancel()
-        self.__remindersList.remove(self)
-
-    @tasks.loop(minutes=1.0)
-    async def sendReminder(self):
-        if datetime.now() > self.__reminderDue:
-            await self.__member.create_dm()
-            await self.__member.dm_channel.send(self.__reminder)
-            self.stopReminderCheck()
-
+# Sets the reminder and returns a dictionary.
 async def set_reminder(ctx):
 
     message = ctx.message.content
@@ -56,10 +34,19 @@ async def set_reminder(ctx):
             await handleReminderCases(ctx)
             return
 
+
+    # REFACTOR FOR PERSISTANCE
+    reminderTime = datetime.now() + timedelta(minutes=int(duration))
+    str_reminder = reminderTime.strftime('%Y-%m-%d %H:%M:%S.%f')
+    # new_reminder = datetime.strptime(str_reminder, '%Y-%m-%d %H:%M:%S.%f')
+
+    d_reminder = {'id' : member.id,
+                'reminder' : reminder,
+                'time' : str_reminder}
+
     confirmation = "Reminder set. Reminding you in " + duration + " minutes."
     await ctx.message.channel.send(confirmation)
-
-    remindersList.append(reminderHelper(member, duration, reminder, remindersList))
+    return d_reminder
 
 async def handleReminderCases(ctx, integer=False):
     

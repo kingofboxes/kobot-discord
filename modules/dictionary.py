@@ -7,8 +7,7 @@ from wn.constants import wordnet_30_dir, wordnet_33_dir
 import urllib.request
 import json
 
-# NORMAL DICTIONARY
-
+# WordNet dictionary.
 # Gets the definition of the word.
 async def get_definition_normal(ctx):
 
@@ -28,12 +27,12 @@ async def get_definition_normal(ctx):
             if(query in syn.name()):
                 definitions = definitions + f"{index}. [{categorise(syn.name())}] {syn.definition()}\n"
                 index += 1
-        message = f"```\nDefinition of {query}:\n{definitions}```"  
+        await ctx.message.channel.send(f"```\nDefinition of {query}:\n{definitions}```")
     else:
-        message = f"Could not find requested word in dictionary."   
+        await ctx.message.channel.send(f"Could not find requested word in dictionary, doing a secondary search in Urban Dictionary...")
+        await get_definition_urban(ctx)   
 
-    await ctx.message.channel.send(message)
-
+    
 # Categorises word based on the synset name.
 def categorise(word):
     
@@ -48,6 +47,7 @@ def categorise(word):
     else:
         return "n/a"
 
+# Urban Dictionary.
 # Gets the definition of the word from Urban Dictionary.
 async def get_definition_urban(ctx):
 
@@ -57,7 +57,7 @@ async def get_definition_urban(ctx):
     response = urllib.request.urlopen(url)
     data = json.loads(response.read())
 
-    if len(data) > 0:
+    if not data:
 
         definitions = sorted(data['list'], key = lambda i : i['thumbs_up'], reverse=True)[0:3]
         
@@ -71,11 +71,11 @@ async def get_definition_urban(ctx):
             else:
                 block = block + f"{index}. {definition} ({d['thumbs_up']} thumbs up)\n\n{strip_artefacts(d['example'])}\n"
             index += 1
-        
+
         message = f"Searching Urban Dictionary for {query}...\n```{block}```"
-        print(block)
+
     else:
-        message = f"Could not find requested word in dictionary."   
+        message = f"Could not find requested word on Urban Dictionary."   
         
     await ctx.message.channel.send(message)
 
