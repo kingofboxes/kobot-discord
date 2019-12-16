@@ -34,15 +34,9 @@ async def set_reminder(ctx):
             await handleReminderCases(ctx)
             return
 
-
-    # REFACTOR FOR PERSISTANCE
-    reminderTime = datetime.now() + timedelta(minutes=int(duration))
-    str_reminder = reminderTime.strftime('%Y-%m-%d %H:%M:%S.%f')
-    # new_reminder = datetime.strptime(str_reminder, '%Y-%m-%d %H:%M:%S.%f')
-
     d_reminder = {'id' : member.id,
                 'reminder' : reminder,
-                'time' : str_reminder}
+                'time' : datetime.now() + timedelta(minutes=int(duration))}
 
     confirmation = "Reminder set. Reminding you in " + duration + " minutes."
     await ctx.message.channel.send(confirmation)

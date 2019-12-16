@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 from datetime import datetime
-import signal
+import signal 
 import json
 
 # Internal modules.
@@ -18,21 +18,9 @@ from utilities.logger import *
 # Load the required variables from .env file.
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
-reminders = []
 
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
-
-# ------------------ PERSISTENCE STARTS HERE ------------------ #
-
-def save_exit():
-    print('Exiting...')
-
-def save_exit_handler(signal, frame):
-    save_exit()
-    sys.exit()
-
-signal.signal(signal.SIGINT, save_exit_handler)
 
 # ------------------ EVENTS START HERE ------------------ #
     
@@ -116,14 +104,14 @@ async def udict(ctx):
     await get_definition_urban(ctx)
 
 # Log out and dump reminders into a file for persistency's sake.
-@bot.command(name='logout')
+@bot.command(name='nap')
 @commands.is_owner()
 async def logout(ctx):
 
-    # Opens the json file for writing.
-    with open('data/reminders.json', 'w+') as fp:
-        json.dump(reminders, fp)
-        fp.close()
+    # Good night...
+    check_reminders.cancel()
+    await ctx.message.channel.send("Good night...")
+    dumpReminders()
 
     # Closes the bot gracefully.
     await bot.logout()
@@ -131,18 +119,37 @@ async def logout(ctx):
 # Background task that checks reminders when the bot loads.
 @tasks.loop(seconds=1.0)
 async def check_reminders():
-
     for d in reminders:
-        if datetime.now() > datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f'):
+        if datetime.now() > d['time']:
             for g in bot.guilds:
                 member = g.get_member(d['id'])
                 await member.send(d['reminder'])
                 reminders.remove(d)
 
-# Load json.
+# ------------------ PERSISTENCE STARTS HERE ------------------ #
+
+def dumpReminders():
+    # Convert the datetime object to a string first.
+    for d in reminders:
+        d['time'] = d['time'].strftime('%Y-%m-%d %H:%M:%S.%f')
+
+    # Opens the json file for writing.
+    with open('data/reminders.json', 'w+') as fp:
+        json.dump(reminders, fp)
+        fp.close()
+
+# Load json, but convert string to a datetime object.
 with open('data/reminders.json', 'r') as fp:
     reminders = json.load(fp)
+    for d in reminders:
+        d['time'] = datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f')
     fp.close()
 
 # Run the bot.
-bot.run(env_token)
+try:
+    bot.run(env_token)
+except RuntimeError:
+    dumpReminders()
+    print("Bot has been forcefully shut down.")
+else:
+    pass
