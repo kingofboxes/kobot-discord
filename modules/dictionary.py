@@ -52,7 +52,8 @@ def categorise(word):
 async def get_definition_urban(ctx):
 
     query = ctx.message.content.split(' ', 1)[1]
-    url = "http://api.urbandictionary.com/v0/define?term=" + query
+    parseQuery = query.replace(' ', '+')
+    url = "http://api.urbandictionary.com/v0/define?term=" + parseQuery
     response = urllib.request.urlopen(url)
     data = json.loads(response.read())
 
@@ -65,7 +66,7 @@ async def get_definition_urban(ctx):
 
         for d in definitions:
             definition = strip_artefacts(d['definition'])
-            if '\n' not in d['example']:
+            if d['example'][-2:] != '\n':
                 block = block + f"{index}. {definition} ({d['thumbs_up']} thumbs up)\n\n{strip_artefacts(d['example'])}\n\n"
             else:
                 block = block + f"{index}. {definition} ({d['thumbs_up']} thumbs up)\n\n{strip_artefacts(d['example'])}\n"
