@@ -5,17 +5,14 @@ from dotenv import load_dotenv
 from datetime import datetime
 
 # Internal modules.
-# from modules.quote import quoteMessage
 from modules.reminder import set_reminder, showReminders
-from modules.uwulate import uwulate, uwulateMessage
 from modules.dictionary import get_definition_normal, get_definition_urban
-# from modules.dice import roll_dice
-from modules.utilities.logger import *
 
 # COGS
+from modules.utilities.logger import *
 from modules.dice import Dice
 from modules.quote import Quote
-
+from modules.uwulate import Uwulate
 
 # Load the required variables from .env file.
 load_dotenv()
@@ -44,19 +41,6 @@ async def on_message(message):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.CheckFailure):
         await ctx.send('You do not have permission to use this command.')
-
-# Implements the quoting functionality.
-@bot.event
-async def on_reaction_add(reaction, user):
-    
-    # Representations of emojis.
-    wheelchair_emoji = b'\xe2\x99\xbf'
-
-    # Triggers the uwulating module.
-    if(reaction.emoji.encode() == wheelchair_emoji):
-        log(f'[{timestamp()}] {user.name} uwulated message: {reaction.message.content}')
-        await uwulateMessage(reaction, user, bot)
-        await reaction.message.remove_reaction(wheelchair_emoji.decode(), user)
 
 # ------------------ COMMANDS START HERE ------------------ #
 # Mirrors whatever the user says, sends it back to you as a PM.
@@ -105,12 +89,6 @@ async def remove(ctx):
         await ctx.message.channel.send("Upcoming reminder removed.")
     else:
         await ctx.message.channel.send("There are no reminders to be removed.")
-
-# uwutranslator, like the one on Reddit.
-@bot.command(name='uwulate', help='Translate what you type into the language of the gods')
-async def uwu(ctx):
-    message = uwulate(ctx.message.content.split(' ', 1)[1])
-    await ctx.message.channel.send(message)
 
 # Dictionary for quick definition of words.
 @bot.command(name='define', help='Searches your word in the dictionary')
@@ -182,6 +160,7 @@ with open('data/reminders.json', 'r') as fp:
 
 bot.add_cog(Dice(bot))
 bot.add_cog(Quote(bot))
+bot.add_cog(Uwulate(bot))
 
 # Run the bot, but try to catch RuntimeError from SIGINT (signal doesn't seem to work).
 try:
