@@ -14,6 +14,7 @@ async def set_reminder(ctx):
     # If there's only 1 thing in the list, it'll be a default implementation.
     # Default reminder: 10 minutes.
     duration = "10"
+    summary = "No reminder description specified."
 
     if len(input) == 1:
         reminder = f"Reminding you for something you've set {duration} minutes ago."
@@ -30,12 +31,14 @@ async def set_reminder(ctx):
         if input[1].isdigit():
             duration = input[1]
             reminder = f"Reminder from {input[1]} minutes ago: {input[2]}."
+            summary = input[2]
         else:
             await handleReminderCases(ctx)
             return
 
     d_reminder = {'id' : member.id,
                 'reminder' : reminder,
+                'summary' : summary,
                 'time' : datetime.now() + timedelta(minutes=int(duration))}
 
     confirmation = f"Reminder set. Reminding you in {duration} minutes."
@@ -61,7 +64,7 @@ async def showReminders(ctx, reminders):
         index = 1
         message = "Your list of reminders:\n"
         for d in reminders:
-            message = message + f"[{index}] {d['time'].strftime('%Y-%m-%d %H:%M:%S')}: {d['reminder']}\n"
+            message = message + f"[{index}] {d['time'].strftime('%Y-%m-%d %H:%M:%S')}: {d['summary']}\n"
             index += 1
     
     message = f"```\n{message}\n```"
