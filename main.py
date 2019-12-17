@@ -69,11 +69,7 @@ async def on_reaction_add(reaction, user):
 # Mirrors whatever the user says, sends it back to you as a PM.
 @bot.command(name='mirror')
 async def mirror(ctx):
-    member = ctx.message.author
-    response = ctx.message.content.split()[1:]
-    response = ' '.join(response)
-    await member.create_dm()
-    await member.dm_channel.send(response)
+    await ctx.message.channel.send((ctx.message.content.split(' ', 1)[1]))
 
 # Reminder feature, like the one on Reddit.
 @bot.command(name='remindme')
@@ -127,24 +123,30 @@ async def logout(ctx):
 @tasks.loop(seconds=1.0)
 async def check_reminders():
 
-    print(reminders)
+    # Alllow function to access the global variable.
+    global reminders
 
+    # Keep track of the removed entries.
+    removed = []
     for d in reminders:
         if datetime.now() > d['time']:
             member = findMember(d['id'])
-            if not member:
+            if member is not None:
                 await member.send(d['reminder'])
-                break
+                removed.append(d)
+    
+    # Remove it after the loop.
+    for d in removed:
+        reminders.remove(d)
 
-    reminders = [x for x in reminders if not d]
-    print(reminders)
-
+# Helper function to find a member.
 def findMember(id):
     for g in bot.guilds:
-        member = g.get_member(d['id'])
-        if not member:
-            return member
-    return None
+        member = g.get_member(id)
+        if member is not None:
+            break
+    return member
+    
 # ------------------ PERSISTENCE STARTS HERE ------------------ #
 
 # Load json, but convert string to a datetime object.
