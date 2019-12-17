@@ -18,6 +18,7 @@ from utilities.logger import *
 # Load the required variables from .env file.
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
+reminders = []
 
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
@@ -111,7 +112,15 @@ async def logout(ctx):
     # Good night...
     check_reminders.cancel()
     await ctx.message.channel.send("Good night...")
-    dumpReminders()
+
+    # Convert the datetime object to a string first.
+    for d in reminders:
+        d['time'] = d['time'].strftime('%Y-%m-%d %H:%M:%S.%f')
+
+    # Opens the json file for writing.
+    with open('data/reminders.json', 'w+') as fp:
+        json.dump(reminders, fp)
+        fp.close()
 
     # Closes the bot gracefully.
     await bot.logout()
@@ -128,16 +137,6 @@ async def check_reminders():
 
 # ------------------ PERSISTENCE STARTS HERE ------------------ #
 
-def dumpReminders():
-    # Convert the datetime object to a string first.
-    for d in reminders:
-        d['time'] = d['time'].strftime('%Y-%m-%d %H:%M:%S.%f')
-
-    # Opens the json file for writing.
-    with open('data/reminders.json', 'w+') as fp:
-        json.dump(reminders, fp)
-        fp.close()
-
 # Load json, but convert string to a datetime object.
 with open('data/reminders.json', 'r') as fp:
     reminders = json.load(fp)
@@ -145,11 +144,13 @@ with open('data/reminders.json', 'r') as fp:
         d['time'] = datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f')
     fp.close()
 
-# Run the bot.
-try:
-    bot.run(env_token)
-except RuntimeError:
-    dumpReminders()
-    print("Bot has been forcefully shut down.")
-else:
-    pass
+bot.run(env_token)
+
+# # Run the bot.
+# try:
+#     bot.run(env_token)
+# except RuntimeError:
+#     dumpReminders()
+#     print("Bot has been forcefully shut down.")
+# else:
+#     pass
