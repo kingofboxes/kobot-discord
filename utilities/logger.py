@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
+import pytz
 
-# Returns a timestamped string (UTC+11 for Sydney).
+# Returns a timestamped string for specified timezone from .
 def timestamp():
-    return (datetime.now() + timedelta(hours=11)).strftime("%d/%m/%Y, %H:%M:%S")
+    timezone = pytz.timezone("Australia/NSW")
+    return datetime.now(timezone).strftime("%d/%m/%Y, %H:%M:%S")
 
 def log(message):
     print(message)

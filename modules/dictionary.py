@@ -4,8 +4,7 @@ from wn.info import WordNetInformationContent
 from wn.constants import wordnet_30_dir, wordnet_33_dir
 
 # For urban dictionary.
-import urllib.request
-import json
+import urllib.request, json
 
 # WordNet dictionary.
 # Gets the definition of the word.
@@ -71,7 +70,6 @@ async def get_definition_urban(ctx):
             else:
                 block = block + f"{index}. {definition} ({d['thumbs_up']} thumbs up)\n\n{strip_artefacts(d['example'])}\n"
             index += 1
-
         message = f"Searching Urban Dictionary for {query}...\n```{block}```"
 
     else:
@@ -88,5 +86,4 @@ def strip_artefacts(string):
     
     # In case of doubles...
     string = string.replace('\r\n\r\n', '\r\n')
-
     return string

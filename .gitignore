@@ -5,3 +5,4 @@ __pycache__/
 modules/__pycache__
 .env
 log.txt
+data/log.txt

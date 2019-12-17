@@ -1,5 +1,4 @@
-import discord
-import random
+import discord, random
 
 # All bets are off.
 async def roll_dice(ctx):

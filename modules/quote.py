@@ -43,6 +43,5 @@ def createEmbed(reaction, user):
         embed.set_image(url=url)
 
     embed.set_footer(text="Date sent: {0}".format(time_sent.strftime("%d/%m/%Y, %H:%M:%S")))
-
     return embed
     
