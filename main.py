@@ -126,13 +126,25 @@ async def logout(ctx):
 # Background task that checks reminders when the bot loads.
 @tasks.loop(seconds=1.0)
 async def check_reminders():
+
+    print(reminders)
+
     for d in reminders:
         if datetime.now() > d['time']:
-            for g in bot.guilds:
-                member = g.get_member(d['id'])
+            member = findMember(d['id'])
+            if not member:
                 await member.send(d['reminder'])
-                reminders.remove(d)
+                break
 
+    reminders = [x in reminders if not d]
+    print(reminders)
+
+def findMember(id):
+    for g in bot.guilds:
+        member = g.get_member(d['id'])
+        if not member:
+            return member
+    return None
 # ------------------ PERSISTENCE STARTS HERE ------------------ #
 
 # Load json, but convert string to a datetime object.
