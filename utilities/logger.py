@@ -8,7 +8,7 @@ def timestamp():
 
 def log(message):
     print(message)
-    f = open("log.txt", "a+")
+    f = open("data/log.txt", "a+")
     f.write(message + "\n")
     f.close()
 
