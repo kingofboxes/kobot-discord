@@ -136,7 +136,7 @@ async def check_reminders():
                 await member.send(d['reminder'])
                 break
 
-    reminders = [x in reminders if not d]
+    reminders = [x for x in reminders if not d]
     print(reminders)
 
 def findMember(id):
