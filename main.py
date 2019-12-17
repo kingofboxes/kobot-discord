@@ -5,13 +5,16 @@ from dotenv import load_dotenv
 from datetime import datetime
 
 # Internal modules.
-from modules.quote import quoteMessage
+# from modules.quote import quoteMessage
 from modules.reminder import set_reminder, showReminders
 from modules.uwulate import uwulate, uwulateMessage
 from modules.dictionary import get_definition_normal, get_definition_urban
 # from modules.dice import roll_dice
-from utilities.logger import *
+from modules.utilities.logger import *
+
+# COGS
 from modules.dice import Dice
+from modules.quote import Quote
 
 
 # Load the required variables from .env file.
@@ -45,15 +48,9 @@ async def on_command_error(ctx, error):
 # Implements the quoting functionality.
 @bot.event
 async def on_reaction_add(reaction, user):
+    
     # Representations of emojis.
-    asterisk_emoji = b'*\xef\xb8\x8f\xe2\x83\xa3'
     wheelchair_emoji = b'\xe2\x99\xbf'
-
-    # Triggers the quote module.
-    if(reaction.emoji.encode() == asterisk_emoji):
-        log(f'[{timestamp()}] {user.name} quoted message: {reaction.message.content}')
-        await quoteMessage(reaction, user)
-        await reaction.message.remove_reaction(asterisk_emoji.decode(), user)
 
     # Triggers the uwulating module.
     if(reaction.emoji.encode() == wheelchair_emoji):
@@ -120,11 +117,6 @@ async def uwu(ctx):
 async def define(ctx):
     await get_definition_normal(ctx)
 
-# # Dice roll for decisions if you want to leave it up to the gods.
-# @bot.command(name='roll', help='Rolls a random number between your choice')
-# async def roll(ctx):
-#     await roll_dice(ctx)
-
 # Urban dictionary.
 @bot.command(name='udict', help='Uses Urban Dictionary to find a word')
 async def udict(ctx):
@@ -189,6 +181,7 @@ with open('data/reminders.json', 'r') as fp:
 
 
 bot.add_cog(Dice(bot))
+bot.add_cog(Quote(bot))
 
 # Run the bot, but try to catch RuntimeError from SIGINT (signal doesn't seem to work).
 try:

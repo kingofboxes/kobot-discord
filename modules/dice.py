@@ -22,7 +22,9 @@ class Dice(commands.Cog):
         valid = True
 
         # Handles the cases.
-        if len(input) == 2:
+        if len(input) == 1:
+            pass
+        elif len(input) == 2:
             if input[1].lstrip("-").isdigit():
                 if int(input[1]) < 0: valid = False
                 upperBound = int(input[1])
