@@ -9,8 +9,10 @@ from modules.quote import quoteMessage
 from modules.reminder import set_reminder, showReminders
 from modules.uwulate import uwulate, uwulateMessage
 from modules.dictionary import get_definition_normal, get_definition_urban
-from modules.dice import roll_dice
+# from modules.dice import roll_dice
 from utilities.logger import *
+from modules.dice import Dice
+
 
 # Load the required variables from .env file.
 load_dotenv()
@@ -118,10 +120,10 @@ async def uwu(ctx):
 async def define(ctx):
     await get_definition_normal(ctx)
 
-# Dice roll for decisions if you want to leave it up to the gods.
-@bot.command(name='roll', help='Rolls a random number between your choice')
-async def roll(ctx):
-    await roll_dice(ctx)
+# # Dice roll for decisions if you want to leave it up to the gods.
+# @bot.command(name='roll', help='Rolls a random number between your choice')
+# async def roll(ctx):
+#     await roll_dice(ctx)
 
 # Urban dictionary.
 @bot.command(name='udict', help='Uses Urban Dictionary to find a word')
@@ -184,6 +186,9 @@ with open('data/reminders.json', 'r') as fp:
     for d in reminders:
         d['time'] = datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f')
     fp.close()
+
+
+bot.add_cog(Dice(bot))
 
 # Run the bot, but try to catch RuntimeError from SIGINT (signal doesn't seem to work).
 try:
