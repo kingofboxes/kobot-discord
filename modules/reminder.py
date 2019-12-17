@@ -16,20 +16,20 @@ async def set_reminder(ctx):
     duration = "10"
 
     if len(input) == 1:
-        reminder = "Reminding you for something you've set " + duration + " minutes ago."
+        reminder = f"Reminding you for something you've set {duration} minutes ago."
     elif len(input) == 2:
         if input[1].lstrip("-").isdigit():
             duration = input[1]
             if int(duration) <= 0:
                 await handleReminderCases(ctx, True)
                 return
-            reminder = "Reminding you for something you've set " + input[1] + " minutes ago."
+            reminder = f"Reminding you for something you've set {input[1]} minutes ago."
         else:
-            reminder = "Reminding you for something you've set 10 minutes ago: \"" + input[1] + "\"."
+            reminder = f"Reminding you for something you've set 10 minutes ago: {input[1]}."
     else:
         if input[1].isdigit():
             duration = input[1]
-            reminder = "Reminder from " + input[1] + " minutes ago: \"" + input[2] + "\"."
+            reminder = f"Reminder from {input[1]} minutes ago: {input[2]}."
         else:
             await handleReminderCases(ctx)
             return
@@ -38,7 +38,7 @@ async def set_reminder(ctx):
                 'reminder' : reminder,
                 'time' : datetime.now() + timedelta(minutes=int(duration))}
 
-    confirmation = "Reminder set. Reminding you in " + duration + " minutes."
+    confirmation = f"Reminder set. Reminding you in {duration} minutes."
     await ctx.message.channel.send(confirmation)
     return d_reminder
 

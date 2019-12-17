@@ -4,7 +4,6 @@ import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 from datetime import datetime
-import signal 
 import json
 
 # Internal modules.
@@ -18,7 +17,6 @@ from utilities.logger import *
 # Load the required variables from .env file.
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
-reminders = []
 
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
@@ -144,13 +142,20 @@ with open('data/reminders.json', 'r') as fp:
         d['time'] = datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f')
     fp.close()
 
-bot.run(env_token)
+# Run the bot.
+try:
+    bot.run(env_token)
 
-# # Run the bot.
-# try:
-#     bot.run(env_token)
-# except RuntimeError:
-#     dumpReminders()
-#     print("Bot has been forcefully shut down.")
-# else:
-#     pass
+except RuntimeError:
+    # Convert the datetime object to a string first.
+    for d in reminders:
+        d['time'] = d['time'].strftime('%Y-%m-%d %H:%M:%S.%f')
+
+    # Opens the json file for writing.
+    with open('data/reminders.json', 'w+') as fp:
+        json.dump(reminders, fp)
+        fp.close()
+    print("Bot has been forcefully shut down.")
+    
+else:
+    pass
