@@ -42,11 +42,30 @@ async def set_reminder(ctx):
     await ctx.message.channel.send(confirmation)
     return d_reminder
 
+# Handles edge cases.
 async def handleReminderCases(ctx, integer=False):
-    
     if integer is False:
         usage_message = "```Usage: !remindme [time] [description]```"
     else:
         usage_message = "Please enter a non-negative or non-zero integer for time."
 
     await ctx.message.channel.send(usage_message)
+
+# Show reminders.
+async def showReminders(ctx, reminders):
+
+    if len(reminders) == 0:
+        await ctx.message.author.send("You do not have any reminders.")
+        return
+    else:
+        index = 1
+        message = "Your list of reminders:\n"
+        for d in reminders:
+            message = message + f"[{index}] {d['time'].strftime('%Y-%m-%d %H:%M:%S')}: {d['reminder']}\n"
+            index += 1
+    
+    message = f"```\n{message}\n```"
+    await ctx.message.author.send(message)
+
+
+

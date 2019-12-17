@@ -6,7 +6,7 @@ from datetime import datetime
 
 # Internal modules.
 from modules.quote import quoteMessage
-from modules.reminder import set_reminder
+from modules.reminder import set_reminder, showReminders
 from modules.uwulate import uwulate, uwulateMessage
 from modules.dictionary import get_definition_normal, get_definition_urban
 from modules.dice import roll_dice
@@ -69,8 +69,43 @@ async def mirror(ctx):
 # Reminder feature, like the one on Reddit.
 @bot.command(name='remindme', help='Sets a reminder for you')
 async def reminder(ctx):
+    global reminders
     d = await set_reminder(ctx)
     reminders.append(d)
+    print(reminders)
+    reminders = sorted(reminders, key = lambda i : i['time'])
+    print(reminders)
+
+# Show all reminders.
+@bot.command(name='reminders', help='Shows a list of reminders')
+async def reminderList(ctx):
+    global reminders
+    reminderList = []
+    for d in reminders:
+        if d['id'] == ctx.message.author.id:
+            reminderList.append(d)
+    await showReminders(ctx, reminderList)
+
+# Remove first reminder.
+@bot.command(name='remove', help='Removes reminders')
+async def remove(ctx):
+    
+    # Temporary variable to hold the first element.
+    global reminders
+    pop = None
+
+    # Find the first reminder from the same user ID.
+    for d in reminders:
+        if d['id'] == ctx.message.author.id:
+            pop = d
+            break
+    
+    # Remove the element if not none.
+    if pop is not None:
+        reminders.remove(pop)
+        await ctx.message.channel.send("Upcoming reminder removed.")
+    else:
+        await ctx.message.channel.send("There are no reminders to be removed.")
 
 # uwutranslator, like the one on Reddit.
 @bot.command(name='uwulate', help='Translate what you type into the language of the gods')
