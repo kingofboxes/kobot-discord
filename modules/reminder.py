@@ -23,11 +23,13 @@ class Reminders(commands.Cog):
         # Put together the reminder.
         if len(input) == 1:
             pass
+
         elif len(input) == 2:
             if input[1].lstrip("-").isdigit():
                 duration = input[1]
                 if int(duration) > 0: valid = True
                 reminder = f"Reminding you for something you've set {input[1]} minutes ago."
+
         else:
             if input[1].lstrip("-").isdigit():
                 duration = input[1]
@@ -48,7 +50,6 @@ class Reminders(commands.Cog):
             message = f"Reminder set. Reminding you in {duration} minutes."
             self._reminders.append(d_reminder)
             
-
         else:
             message = "```Usage: !remindme <time> [description]; time >= 0```"
 
@@ -58,8 +59,8 @@ class Reminders(commands.Cog):
     @tasks.loop(seconds=1.0)
     async def check_reminders(self):
         
+        # Sort the reminders everytime you check.
         print(self._reminders)
-
         self._reminders = sorted(self._reminders, key = lambda i : i['time'])
 
         # Keep track of the removed entries.
@@ -83,5 +84,6 @@ class Reminders(commands.Cog):
                 break
         return member
 
+    # Getter for reminders list.
     def getRemindersList(self):
         return self._reminders
