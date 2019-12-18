@@ -44,7 +44,7 @@ class Reminders(commands.Cog):
             d_reminder = {'id' : ctx.message.author.id,
                     'reminder' : reminder,
                     'summary' : summary,
-                    'time' : datetime.now() + timedelta(seconds=int(duration))}
+                    'time' : datetime.now() + timedelta(minutes=int(duration))}
 
             # Append the dictionary to the list of reminders and sorts it.
             message = f"Reminder set. Reminding you in {duration} minutes."
