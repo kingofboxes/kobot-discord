@@ -93,9 +93,7 @@ class Reminders(commands.Cog):
         return self._reminders
 
     # Uses regex to get the fields to make a new relativedelta object.
-    # Group 1 = Year, Group 2 = Month, 
-    # Group 3 = Day, Group 4 = Hour, 
-    # Group 5 = Minute
+    # Group 1 = Year, Group 2 = Month, Group 3 = Day, Group 4 = Hour, Group 5 = Minute
     def generateDuration(self, dateStr):
         
         # Constants
@@ -103,13 +101,13 @@ class Reminders(commands.Cog):
         MINUTES_IN_MONTH = 43800
         MINUTES_IN_DAY = 1440
         MINUTES_IN_HOUR = 60
-
         dateFmt = r"^\s*(?:(\d+)Y)?" + \
                 r"\s*(?:(\d+)M)?" + \
                 r"\s*(?:(\d+)d)?" + \
                 r"\s*(?:(\d+)h)?" + \
                 r"\s*(?:(\d+)m)?\s*$"
 
+        # Find a match.
         match = re.search(dateFmt, dateStr)
         if match is not None:
             duration = [int(x) for x in match.groups(default="0")]
@@ -135,6 +133,31 @@ class Reminders(commands.Cog):
         
         message = f"```\n{message}\n```"
         await ctx.message.channel.send(message)
+
+    # Returns a list of reminders.
+    @commands.command(help='Removes reminders')
+    async def remove(self, ctx):
+        
+        # Get a list of your own reminders.
+        command = ctx.message.content.split()
+        pReminders = self.getPersonalReminders(ctx)
+        numReminders = len(pReminders)
+
+        # Removes the reminder.
+        if len(command) == 2:
+            index = command[1]
+            if numReminders == 0:
+                await ctx.message.channel.send("You do not have any reminders.")
+                return
+            else:
+                if index.isdigit():
+                    if 0 <= int(index)-1 < numReminders:
+                        self._reminders.remove(pReminders[int(index)-1])
+                        await ctx.message.channel.send("Reminder removed.")
+                        return
+                await ctx.message.channel.send("```Usage: !remove <index>; 0 < index <= number of reminders```")
+        else:
+            await ctx.message.channel.send("```Usage: !remove <index>; 0 < index <= number of reminders```")
 
     # Helper to get list of your own reminders.
     def getPersonalReminders(self, ctx):
