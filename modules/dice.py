@@ -1,6 +1,6 @@
+import random
 import discord
 from discord.ext import commands
-import random
 
 # Dice module.
 class Dice(commands.Cog):

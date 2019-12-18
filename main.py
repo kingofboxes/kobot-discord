@@ -6,13 +6,13 @@ from datetime import datetime
 
 # Internal modules.
 from modules.reminder import set_reminder, showReminders
-from modules.dictionary import get_definition_normal, get_definition_urban
 
 # COGS
 from modules.utilities.logger import *
 from modules.dice import Dice
 from modules.quote import Quote
 from modules.uwulate import Uwulate
+from modules.dictionary import Dictionary
 
 # Load the required variables from .env file.
 load_dotenv()
@@ -90,15 +90,7 @@ async def remove(ctx):
     else:
         await ctx.message.channel.send("There are no reminders to be removed.")
 
-# Dictionary for quick definition of words.
-@bot.command(name='define', help='Searches your word in the dictionary')
-async def define(ctx):
-    await get_definition_normal(ctx)
 
-# Urban dictionary.
-@bot.command(name='udict', help='Uses Urban Dictionary to find a word')
-async def udict(ctx):
-    await get_definition_urban(ctx)
 
 # Log out and dump reminders into a file for persistency's sake.
 @bot.command(name='nap', help='Shuts the bot down')
@@ -161,6 +153,7 @@ with open('data/reminders.json', 'r') as fp:
 bot.add_cog(Dice(bot))
 bot.add_cog(Quote(bot))
 bot.add_cog(Uwulate(bot))
+bot.add_cog(Dictionary(bot))
 
 # Run the bot, but try to catch RuntimeError from SIGINT (signal doesn't seem to work).
 try:
