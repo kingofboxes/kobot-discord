@@ -1,74 +1,87 @@
 import discord
-from datetime import datetime, timedelta
 from discord.ext import tasks, commands
+from datetime import datetime, timedelta
 
-# Sets the reminder and returns a dictionary.
-async def set_reminder(ctx):
+# Dice module.
+class Reminders(commands.Cog):
 
-    message = ctx.message.content
-    member = ctx.message.author
+    def __init__(self, bot, reminders):
+        self.bot = bot
+        self._reminders = reminders
 
-    # Maximum amount of times the string should be split is 2.
-    input = message.split(' ', 2)
+    # Sets the reminder and returns a dictionary.
+    @commands.command(help='Sets a reminder for you')
+    async def remindme(self, ctx):
 
-    # If there's only 1 thing in the list, it'll be a default implementation.
-    # Default reminder: 10 minutes.
-    duration = "10"
-    summary = "No reminder description specified."
+        # Use cases:
+        # !remindme <duration>
+        # !remindme <duration> <message>
+        input = ctx.message.content.split(' ', 2)
+        summary = "No reminder description specified."
+        valid = False
 
-    if len(input) == 1:
-        reminder = f"Reminding you for something you've set {duration} minutes ago."
-    elif len(input) == 2:
-        if input[1].lstrip("-").isdigit():
-            duration = input[1]
-            if int(duration) <= 0:
-                await handleReminderCases(ctx, True)
-                return
-            reminder = f"Reminding you for something you've set {input[1]} minutes ago."
+        # Put together the reminder.
+        if len(input) == 1:
+            pass
+        elif len(input) == 2:
+            if input[1].lstrip("-").isdigit():
+                duration = input[1]
+                if int(duration) > 0: valid = True
+                reminder = f"Reminding you for something you've set {input[1]} minutes ago."
         else:
-            reminder = f"Reminding you for something you've set 10 minutes ago: {input[1]}."
-    else:
-        if input[1].isdigit():
-            duration = input[1]
-            reminder = f"Reminder from {input[1]} minutes ago: {input[2]}."
-            summary = input[2]
+            if input[1].lstrip("-").isdigit():
+                duration = input[1]
+                summary = input[2]
+                if int(duration) > 0: valid = True
+                reminder = f"Reminder from {input[1]} minutes ago: {input[2]}."
+
+        # Send the reminder or usage information.
+        if valid:
+            
+            # Create a dictionary.
+            d_reminder = {'id' : ctx.message.author.id,
+                    'reminder' : reminder,
+                    'summary' : summary,
+                    'time' : datetime.now() + timedelta(seconds=int(duration))}
+
+            # Append the dictionary to the list of reminders and sorts it.
+            message = f"Reminder set. Reminding you in {duration} minutes."
+            self._reminders.append(d_reminder)
+            
+
         else:
-            await handleReminderCases(ctx)
-            return
+            message = "```Usage: !remindme <time> [description]; time >= 0```"
 
-    d_reminder = {'id' : member.id,
-                'reminder' : reminder,
-                'summary' : summary,
-                'time' : datetime.now() + timedelta(minutes=int(duration))}
+        await ctx.message.channel.send(message)
+             
+    # Background task that checks reminders when the bot loads.
+    @tasks.loop(seconds=1.0)
+    async def check_reminders(self):
+        
+        print(self._reminders)
 
-    confirmation = f"Reminder set. Reminding you in {duration} minutes."
-    await ctx.message.channel.send(confirmation)
-    return d_reminder
+        self._reminders = sorted(self._reminders, key = lambda i : i['time'])
 
-# Handles edge cases.
-async def handleReminderCases(ctx, integer=False):
-    if integer is False:
-        usage_message = "```Usage: !remindme [time] [description]```"
-    else:
-        usage_message = "Please enter a non-negative or non-zero integer for time."
+        # Keep track of the removed entries.
+        removed = []
+        for d in self._reminders:
+            if datetime.now() > d['time']:
+                member = self.findMember(d['id'])
+                if member is not None:
+                    await member.send(d['reminder'])
+                    removed.append(d)
+        
+        # Remove it after the loop.
+        for d in removed:
+            self._reminders.remove(d)
 
-    await ctx.message.channel.send(usage_message)
+    # Helper function to find a member.
+    def findMember(self, id):
+        for g in self.bot.guilds:
+            member = g.get_member(id)
+            if member is not None:
+                break
+        return member
 
-# Show reminders.
-async def showReminders(ctx, reminders):
-
-    if len(reminders) == 0:
-        await ctx.message.author.send("You do not have any reminders.")
-        return
-    else:
-        index = 1
-        message = "Your list of reminders:\n"
-        for d in reminders:
-            message = message + f"[{index}] {d['time'].strftime('%Y-%m-%d %H:%M:%S')}: {d['summary']}\n"
-            index += 1
-    
-    message = f"```\n{message}\n```"
-    await ctx.message.author.send(message)
-
-
-
+    def getRemindersList(self):
+        return self._reminders

@@ -48,7 +48,7 @@ echo DISCORD_TOKEN="YOUR_BOT_TOKEN" > .env
 6. Run the program.
 
 ```
-python3 -B main.py
+python3 start.py
 ```
 
 7. If done correctly, it should say that your bot has connected.
@@ -58,11 +58,13 @@ python3 -B main.py
 ### Features List
 1. Parroting. !mirror <message> will send the message back to you in your PMs.
 2. Quoting. Reacting to a message with ✳️ will quote the message and mention the original sender. Works with images.
-3. Reminders. !remindme will set a reminder. Usage: !remindme [time] [description]. Updated to include persistence across shutting/turning server off/on.
+3. Reminders. !remindme will set a reminder. Usage: !remindme <time> [description]. Updated to include persistence.
 4. Uwulate. !uwulate <message> will uwulate the message. Reacting to a message with ♿ will uwulate the message and notify the original sender.
 5. Dictionary. !define <word> will attempt to find the word in the dictionary. Note that it takes some time as it searches a local dictionary (change to JSON scraper later)? If no results are found, it will use Urban Dictionary as a backup search engine.
 6. Dice rolls. !roll [x] [y] will roll a number between x and y (0 and 1 if x and y not given).
 7. Urban Dictionary. !udict <word> will attempt to find a word on Urban Dictionary. Sorts it by thumbs up and gives the top 3 results.
+8. Persistence. Reminders are saved when the bot closes and loaded when the bot is started.
+9. Cogs. The code has been refactored so that every module is a Cog (more OO-styled).
  
 ### Motivation
 1. Parroting was an introduction to using the discord.py and learning how to send messages.
@@ -72,6 +74,8 @@ python3 -B main.py
 5. Dictionary was the fourth major feature that involved learning how to use a different API and combining it with my bot.
 6. Garry always uses RNG to decide on things, so why not incorporate this?
 7. Learning how to manipulate and use the JSON API.
+8. What's the point of reminders when they're gone after the bot resets?
+9. Since this is a major project, might as well do it properly right?
 
 This whole project is a learning experience aimed to develop my skills by extending functionality to the bot while being practical about the features added.
 
