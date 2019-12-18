@@ -11,9 +11,16 @@ class System(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+
+        # Activate background checks.
         print(f'[{timestamp()}] Logged in as {self.bot.user}!')
         reminder_cog = self.bot.get_cog('Reminders')
         reminder_cog.check_reminders.start()
+
+        # Fluff.
+        custom_activity = discord.Game(name="with discord.py API")
+        # custom_activity = discord.Streaming(name="kingofboxes1", url="http://www.twitch.tv/kingofboxes1")
+        await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
 
     @commands.Cog.listener()
     async def on_message(self, message):
