@@ -65,6 +65,7 @@ python3 start.py
 7. Urban Dictionary. !udict <word> will attempt to find a word on Urban Dictionary. Sorts it by thumbs up and gives the top 3 results.
 8. Persistence. Reminders are saved when the bot closes and loaded when the bot is started.
 9. Cogs. The code has been refactored so that every module is a Cog (more OO-styled).
+10. Reddit search. This uses the CSE API to search and give me the results. Usage: !reddit <phrase>.
  
 ### Motivation
 1. Parroting was an introduction to using the discord.py and learning how to send messages.
@@ -76,6 +77,7 @@ python3 start.py
 7. Learning how to manipulate and use the JSON API.
 8. What's the point of reminders when they're gone after the bot resets?
 9. Since this is a major project, might as well do it properly right?
+10. Usually, if I wanted to search Reddit I'd go to Google and do "<keywords> reddit". This automates the process.
 
 This whole project is a learning experience aimed to develop my skills by extending functionality to the bot while being practical about the features added.
 

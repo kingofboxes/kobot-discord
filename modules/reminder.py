@@ -96,11 +96,6 @@ class Reminders(commands.Cog):
     # Group 1 = Year, Group 2 = Month, Group 3 = Day, Group 4 = Hour, Group 5 = Minute
     def generateDuration(self, dateStr):
         
-        # Constants
-        MINUTES_IN_YEAR = 525600
-        MINUTES_IN_MONTH = 43800
-        MINUTES_IN_DAY = 1440
-        MINUTES_IN_HOUR = 60
         dateFmt = r"^\s*(?:(\d+)Y)?" + \
                 r"\s*(?:(\d+)M)?" + \
                 r"\s*(?:(\d+)d)?" + \

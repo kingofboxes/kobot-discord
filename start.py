@@ -12,10 +12,13 @@ from modules.quote import Quote
 from modules.uwulate import Uwulate
 from modules.dictionary import Dictionary
 from modules.reminder import Reminders
+from modules.search import Search
 
 # Load the required variables from .env file.
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
+csj_token = os.getenv('CSJ_TOKEN')
+cse_token = os.getenv('CSE_TOKEN')
 
 # Instantiate a client and run it.
 bot = commands.Bot(command_prefix='!')
@@ -34,6 +37,7 @@ bot.add_cog(Quote(bot))
 bot.add_cog(Uwulate(bot))
 bot.add_cog(Dictionary(bot))
 bot.add_cog(Reminders(bot, reminders))
+bot.add_cog(Search(bot, csj_token, cse_token))
 
 # Hold onto reminders cog.
 reminder_cog = bot.get_cog('Reminders')
