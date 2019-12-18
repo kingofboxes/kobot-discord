@@ -2,7 +2,7 @@ import discord
 import re
 from .utilities.logger import *
 from discord.ext import tasks, commands
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import *
 
 # Dice module.
@@ -92,7 +92,7 @@ class Reminders(commands.Cog):
     def getRemindersList(self):
         return self._reminders
 
-    # Uses regex to get the fields to make a new timedelta object.
+    # Uses regex to get the fields to make a new relativedelta object.
     # Group 1 = Year, Group 2 = Month, 
     # Group 3 = Day, Group 4 = Hour, 
     # Group 5 = Minute
@@ -115,3 +115,31 @@ class Reminders(commands.Cog):
             duration = [int(x) for x in match.groups(default="0")]
             return duration
 
+    # Returns a list of reminders.
+    @commands.command(help='Gives you a list of your reminders')
+    async def reminders(self, ctx):
+
+        # Get a list of your own reminders.
+        pReminders = self.getPersonalReminders(ctx)
+
+        # Show reminders.
+        if len(pReminders) == 0:
+            await ctx.message.channel.send("You do not have any reminders.")
+            return
+        else:
+            index = 1
+            message = "Your list of reminders:\n"
+            for d in pReminders:
+                message = message + f"[{index}] {d['time'].strftime('%Y-%m-%d %H:%M:%S')}: {d['summary']}\n"
+                index += 1
+        
+        message = f"```\n{message}\n```"
+        await ctx.message.channel.send(message)
+
+    # Helper to get list of your own reminders.
+    def getPersonalReminders(self, ctx):
+        pReminders = []
+        for d in self._reminders:
+            if d['id'] == ctx.message.author.id:
+                pReminders.append(d)
+        return pReminders
