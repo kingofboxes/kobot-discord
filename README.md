@@ -55,13 +55,13 @@ CSE_TOKEN=
 
 CSJ is the key for JSON API for Custom Search and CSE is the engine ID of your Custom Search Engine.
 
-6. Run the program.
+7. Run the program.
 
 ```
 python3 start.py
 ```
 
-7. If done correctly, it should say that your bot has connected.
+8. If done correctly, it should say that your bot has connected.
 
 ## Current Features
 
