@@ -67,6 +67,7 @@ python3 start.py
 9. Cogs. The code has been refactored so that every module is a Cog (more OO-styled).
 10. Reddit search. This uses the CSE API to search and give me the results. Usage: !reddit <phrase>.
 11. Bot status. Usage: !change <phrase>.
+12. Twitch stream sync. If you're streaming, the bot will also stream and advertise your link. Change the name and URL inside system.py.
  
 ### Motivation
 1. Parroting was an introduction to using the discord.py and learning how to send messages.
@@ -79,7 +80,8 @@ python3 start.py
 8. What's the point of reminders when they're gone after the bot resets?
 9. Since this is a major project, might as well do it properly right?
 10. Usually, if I wanted to search Reddit I'd go to Google and do "<keywords> reddit". This automates the process.
-11. This was just for pure fluff purposes. 
+11. This was just for pure fluff purposes.
+12. Same as above.
 
 This whole project is a learning experience aimed to develop my skills by extending functionality to the bot while being practical about the features added.
 
