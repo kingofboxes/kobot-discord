@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from discord.ext import commands, tasks
 
 # Import the cogs.
-from system import System
+from modules.system import System
 from modules.utilities.logger import *
 from modules.dice import Dice
 from modules.quote import Quote

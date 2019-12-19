@@ -1,7 +1,7 @@
 import discord, json
 from datetime import datetime
 from discord.ext import commands
-from modules.utilities.logger import *
+from .utilities.logger import *
 
 # System cog.
 class System(commands.Cog):
@@ -79,10 +79,12 @@ class System(commands.Cog):
         await self.bot.logout()
 
     @commands.command(help='Change the game that the bot is playing')
+    @commands.is_owner()
     async def change(self, ctx):
         name = ctx.message.content.split()
         if len(name) > 1:
             custom_activity = discord.Game(name=' '.join(name[1:]))
             await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
+            await ctx.message.channel.send("Game status updated.")
         else:
             await ctx.message.channel.send("```Usage: !change <phrase>```")
