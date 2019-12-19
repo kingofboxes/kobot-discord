@@ -18,8 +18,7 @@ class System(commands.Cog):
         reminder_cog.check_reminders.start()
 
         # Fluff.
-        custom_activity = discord.Game(name="with discord.py API")
-        # custom_activity = discord.Streaming(name="kingofboxes1", url="http://www.twitch.tv/kingofboxes1")
+        custom_activity = discord.Game(name="Discord")
         await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
 
     @commands.Cog.listener()
@@ -66,3 +65,12 @@ class System(commands.Cog):
 
         # Closes the bot gracefully.
         await self.bot.logout()
+
+    @commands.command(help='Change the game that the bot is playing')
+    async def change(self, ctx):
+        name = ctx.message.content.split()
+        if len(name) > 1:
+            custom_activity = discord.Game(name=' '.join(name[1:]))
+            await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
+        else:
+            await ctx.message.channel.send("```Usage: !change <phrase>```")

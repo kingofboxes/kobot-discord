@@ -24,11 +24,14 @@ cse_token = os.getenv('CSE_TOKEN')
 bot = commands.Bot(command_prefix='!')
 
 # Loads the reminders.
-with open('data/reminders.json', 'r') as fp:
-    reminders = json.load(fp)
-    for d in reminders:
-        d['time'] = datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f')
-    fp.close()
+if os.path.exists('data/reminders.json'):
+    with open('data/reminders.json', 'r') as fp:
+        reminders = json.load(fp)
+        for d in reminders:
+            d['time'] = datetime.strptime(d['time'], '%Y-%m-%d %H:%M:%S.%f')
+        fp.close()
+else:
+    reminders = []
 
 # Add cogs to the bot.
 bot.add_cog(System(bot))
