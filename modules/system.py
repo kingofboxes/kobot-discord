@@ -26,10 +26,10 @@ class System(commands.Cog):
     async def on_member_update(self, before, after):
 
         if self.bot.owner_id == before.id:
-            if after.activity.isinstance(discord.Streaming):
+            if isinstance(after.activity, discord.Streaming):
                     custom_activity = discord.Streaming(name="kingofboxes1", url="http://www.twitch.tv/kingofboxes1")
                     await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
-            if not after.activity.isinstance(discord.Streaming):
+            else:
                 custom_activity = discord.Game(name="Discord")
                 await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
 

@@ -42,8 +42,18 @@ pip3 install -r requirements.txt
 5. Create a new file called '.env' as follows.
 
 ```
-echo DISCORD_TOKEN="YOUR_BOT_TOKEN" > .env
+touch .env
 ```
+
+6. Add the following lines:
+
+```
+DISCORD_TOKEN=
+CSJ_TOKEN=
+CSE_TOKEN=
+```
+
+CSJ is the key for JSON API for Custom Search and CSE is the engine ID of your Custom Search Engine.
 
 6. Run the program.
 
@@ -90,3 +100,4 @@ This whole project is a learning experience aimed to develop my skills by extend
 * [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) - For the README.md template.
 * [Cimera42](https://github.com/Cimera42/DiscordBot) - For the idea of QuoteBot.
 * [nltk](https://github.com/nltk/wordnet) - For the standalone wordnet API.
+* [MxBlu](https://github.com/MxBlu) - For the regex date in Reminders.
