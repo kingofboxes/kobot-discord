@@ -21,18 +21,6 @@ class System(commands.Cog):
         custom_activity = discord.Game(name="Discord")
         await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
 
-    # Shameless self-plug for Twitch streams.
-    @commands.Cog.listener()
-    async def on_member_update(self, before, after):
-
-        if self.bot.owner_id == before.id:
-            if isinstance(after.activity, discord.Streaming):
-                    custom_activity = discord.Streaming(name="kingofboxes1", url="http://www.twitch.tv/kingofboxes1")
-                    await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
-            else:
-                custom_activity = discord.Game(name="Discord")
-                await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
-
     @commands.Cog.listener()
     async def on_message(self, message):
 
@@ -42,7 +30,6 @@ class System(commands.Cog):
 
         # Log the message in console, change output to log file later.
         log(f'[{timestamp()}] Message from {message.author}: {message.content}')
-        # await self.bot.process_commands(message)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -54,6 +41,11 @@ class System(commands.Cog):
     async def mirror(self, ctx):
         message = ctx.message.content.split(' ', 1)[1]
         await ctx.message.channel.send(message)
+        
+    # Test command to check if bot is online.
+    @commands.command(help='Test command to check if bot is online.')
+    async def test(self, ctx):
+        await ctx.message.channel.send("Hello world!")
 
     # Log out and dump reminders into a file for persistency's sake.
     @commands.command(help='Shuts the bot down')
