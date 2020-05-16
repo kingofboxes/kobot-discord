@@ -12,6 +12,7 @@ from modules.quote import Quote
 from modules.uwulate import Uwulate
 from modules.dictionary import Dictionary
 from modules.reminder import Reminders
+from modules.kaomoji import Kaomoji
 
 # Cleans up when program exits.
 def cleanup():
@@ -26,7 +27,7 @@ def cleanup():
 
     # Opens the json file for writing.
     with open('data/reminders.json', 'w+') as fp:
-        json.dump(reminders, fp)
+        json.dump(reminders, fp, indent=3)
         fp.close()
 
     print("Bot has been shut down.")
@@ -55,6 +56,7 @@ bot.add_cog(Quote(bot))
 bot.add_cog(Uwulate(bot))
 bot.add_cog(Dictionary(bot))
 bot.add_cog(Reminders(bot, reminders))
+bot.add_cog(Kaomoji(bot))
 
 # Hold onto reminders cog.
 reminder_cog = bot.get_cog('Reminders')
