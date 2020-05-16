@@ -5,7 +5,7 @@ from discord.ext import tasks, commands
 from datetime import datetime
 from dateutil.relativedelta import *
 
-# Dice module.
+# Reminders module.
 class Reminders(commands.Cog):
 
     def __init__(self, bot, reminders):

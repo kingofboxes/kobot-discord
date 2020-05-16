@@ -49,11 +49,7 @@ touch .env
 
 ```
 DISCORD_TOKEN=
-CSJ_TOKEN=
-CSE_TOKEN=
 ```
-
-CSJ is the key for JSON API for Custom Search and CSE is the engine ID of your Custom Search Engine.
 
 7. Run the program.
 
@@ -69,15 +65,18 @@ python3 start.py
 1. Parroting. !mirror <message> will send the message back to you in your PMs.
 2. Quoting. Reacting to a message with ✳️ will quote the message and mention the original sender. Works with images.
 3. Reminders. !remindme will set a reminder. Usage: !remindme <time> [description]. Updated to include persistence.
-4. Uwulate. !uwulate <message> will uwulate the message. Reacting to a message with ♿ will uwulate the message and notify the original sender.
+4. Uwulate. Reacting to a message with ♿ will uwulate the message and notify the original sender.
 5. Dictionary. !define <word> will attempt to find the word in the dictionary. Note that it takes some time as it searches a local dictionary (change to JSON scraper later)? If no results are found, it will use Urban Dictionary as a backup search engine.
 6. Dice rolls. !roll [x] [y] will roll a number between x and y (0 and 1 if x and y not given).
 7. Urban Dictionary. !udict <word> will attempt to find a word on Urban Dictionary. Sorts it by thumbs up and gives the top 3 results.
 8. Persistence. Reminders are saved when the bot closes and loaded when the bot is started.
 9. Cogs. The code has been refactored so that every module is a Cog (more OO-styled).
-10. Reddit search. This uses the CSE API to search and give me the results. Usage: !reddit <phrase>.
-11. Bot status. Usage: !change <phrase>.
-12. Twitch stream sync. If you're streaming, the bot will also stream and advertise your link. Change the name and URL inside system.py.
+10. Cleanup on exit using Python's atexit module.
+
+### Scrapped Features
+1. Bot status. Usage: !change <phrase> (gimmicky and didn't work properly sometimes).
+2. Reddit search. This uses the CSE API to search and give me the results. Usage: !reddit <phrase> (using Google is quicker, so no point).
+3. Uwulate. Quoting still works, but there's no point in using !uwulate.
  
 ### Motivation
 1. Parroting was an introduction to using the discord.py and learning how to send messages.
@@ -94,6 +93,8 @@ python3 start.py
 12. Same as above.
 
 This whole project is a learning experience aimed to develop my skills by extending functionality to the bot while being practical about the features added.
+
+It also gives me something to talk about in interviews for a side-project since it incorporates OO-programming, etc.
 
 ## Acknowledgments
 

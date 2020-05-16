@@ -9,7 +9,7 @@ from wn.constants import wordnet_30_dir, wordnet_33_dir
 # For urban dictionary.
 import urllib.request, json
 
-# Everyday, we stray further from God's light.
+# Class which holds the dictionary.
 class Dictionary(commands.Cog):
 
     def __init__(self, bot):

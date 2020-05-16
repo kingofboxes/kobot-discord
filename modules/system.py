@@ -48,35 +48,13 @@ class System(commands.Cog):
         await ctx.message.channel.send("Hello world!")
 
     # Log out and dump reminders into a file for persistency's sake.
+    # Handled by 'atexit' module.
     @commands.command(help='Shuts the bot down')
     @commands.is_owner()
     async def nap(self, ctx):
 
-        # Good night...
-        reminder_cog = self.bot.get_cog('Reminders')
-        reminder_cog.check_reminders.cancel()
-        reminders = reminder_cog.getRemindersList()
+        # Alert everyone that bot is shutting down.
         await ctx.message.channel.send("Good night...")
-
-        # Convert the datetime object to a string first.
-        for d in reminders:
-            d['time'] = d['time'].strftime('%Y-%m-%d %H:%M:%S.%f')
-
-        # Opens the json file for writing.
-        with open('data/reminders.json', 'w+') as fp:
-            json.dump(reminders, fp)
-            fp.close()
 
         # Closes the bot gracefully.
         await self.bot.logout()
-
-    @commands.command(help='Change the game that the bot is playing')
-    @commands.is_owner()
-    async def change(self, ctx):
-        name = ctx.message.content.split()
-        if len(name) > 1:
-            custom_activity = discord.Game(name=' '.join(name[1:]))
-            await self.bot.change_presence(status=discord.Status.do_not_disturb, activity=custom_activity)
-            await ctx.message.channel.send("Game status updated.")
-        else:
-            await ctx.message.channel.send("```Usage: !change <phrase>```")

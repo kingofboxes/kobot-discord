@@ -19,7 +19,7 @@ class Uwulate(commands.Cog):
         if(reaction.emoji.encode() == wheelchair_emoji):
             log(f'[{timestamp()}] {user.name} uwulated message: {reaction.message.content}')
             await self.uwulateMessage(reaction, user)
-            await self.reaction.message.remove_reaction(reaction.emoji, user)
+            await reaction.message.remove_reaction(reaction.emoji, user)
 
     # Quotes a message by creating an rich embed.
     async def uwulateMessage(self, reaction, user):
@@ -32,12 +32,6 @@ class Uwulate(commands.Cog):
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
         embed.add_field(name="Uwulated message:", value=f"{self.uwulateHelper(reaction.message.content)}", inline=False)
         return embed
-
-    # Sends a translated string to the channel that called it.
-    @commands.command(help='Translate what you type into the language of the gods')
-    async def uwulate(self, ctx):
-        message = ctx.message.content.split(' ', 1)[1]
-        await ctx.message.channel.send(self.uwulateHelper(message))
 
     # Translates a string.
     def uwulateHelper(self, message):
