@@ -7,3 +7,4 @@ modules/__pycache__
 log.txt
 data/log.txt
 data/reminders.json
+*.code-workspace
