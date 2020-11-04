@@ -36,8 +36,12 @@ def cleanup():
 load_dotenv()
 env_token = os.getenv('DISCORD_TOKEN')
 
+# Intents update for Discord.py 1.5.1.
+intents = discord.Intents.default()
+intents.members = True
+
 # Instantiate a client and run it.
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='.', intents=intents)
 
 # Loads the reminders.
 if os.path.exists('data/reminders.json'):
@@ -51,12 +55,14 @@ else:
 
 # Add cogs to the bot.
 bot.add_cog(System(bot))
-bot.add_cog(Dice(bot))
-bot.add_cog(Quote(bot))
-bot.add_cog(Uwulate(bot))
 bot.add_cog(Dictionary(bot))
 bot.add_cog(Reminders(bot, reminders))
-bot.add_cog(Kaomoji(bot))
+
+# Disabled cogs to save memory.
+# bot.add_cog(Dice(bot))
+# bot.add_cog(Quote(bot))
+# bot.add_cog(Uwulate(bot))
+# bot.add_cog(Kaomoji(bot))
 
 # Hold onto reminders cog.
 reminder_cog = bot.get_cog('Reminders')
